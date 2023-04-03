@@ -2,7 +2,7 @@
 from django.test import TestCase
 
 # Third-party Django app imports.
-from model_mommy import mommy
+from model_bakery import baker
 
 # Blog application imports.
 from blog.models import Article
@@ -16,10 +16,10 @@ class CommentTestCase(TestCase):
 
     def setUp(self):
         """
-          Set up all the tests using model_mommy.
+          Set up all the tests using model_bakery.
         """
-        self.article = mommy.make(_model=Article, body="Test")
-        self.comment = mommy.make(Comment, article=self.article)
+        self.article = baker.make(_model=Article, body="Test")
+        self.comment = baker.make(Comment, article=self.article)
 
     def test_if_comment_returns_the_right_user(self):
         self.assertEqual(

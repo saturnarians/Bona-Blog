@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 # Third-party Django app imports.
-from model_mommy import mommy
+from model_bakery import baker
 
 # Blog application imports.
 from blog.models.category_models import Category
@@ -17,9 +17,9 @@ class CategoryTestCase(TestCase):
 
     def setUp(self):
         """
-          Set up all the tests using model_mommy.
+          Set up all the tests using model_bakery.
         """
-        self.category = mommy.make(Category)
+        self.category = baker.make(Category)
 
     def test_if_category_returns_the_right_human_readable_representation(self):
         self.assertEqual(self.category.__str__(), self.category.name)

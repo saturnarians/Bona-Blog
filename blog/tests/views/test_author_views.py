@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 # Third-party Django app imports.
-from model_mommy import mommy
+from model_bakery import baker
 
 # Blog application imports.
 from blog.models.article_models import Article
@@ -21,14 +21,14 @@ class AuthorsListViewTestCase(TestCase):
         """
          Set up all the test using django client
 
-         Model mommy creates three users and store them in a
+         Model bakery creates three users and store them in a
           list called authors and you can access each of them using indices.
 
          In the view, it returns all the users and you can access every users
          profile details through the user's model.
         """
         self.client = Client()
-        self.authors = mommy.make(User, _quantity=3)
+        self.authors = baker.make(User, _quantity=3)
 
     def test_authors_list_view_status_code(self):
         response = self.client.get(reverse('blog:authors_list'))
@@ -73,11 +73,11 @@ class AuthorArticlesListViewTestCase(TestCase):
 
     def setUp(self):
         """
-        Setup all the tests using django client and model_mommy.
+        Setup all the tests using django client and model_bakery.
         """
         self.client = Client()
-        self.author = mommy.make(User)
-        self.articles = mommy.make(Article, body="Test", author=self.author, _quantity=5)
+        self.author = baker.make(User)
+        self.articles = baker.make(Article, body="Test", author=self.author, _quantity=5)
 
     def test_author_article_list_view_url_by_name(self):
         response = self.client.get(reverse('blog:author_articles',
@@ -123,10 +123,10 @@ class AuthorArticlesListViewTestCase(TestCase):
     #     This test checks if the view returns the right articles according to the
     #     date they were published.
     #
-    #     In the setup, model mommy creates five articles and store
+    #     In the setup, model bakery creates five articles and store
     #     them in a list called articles. So the last article in the list will
     #     be the first article in the list view since it was created last by model
-    #     mommy.
+    #     bakery.
     #     The list view orders articles according to the time they were published
     #     so the last article in the articles list will be displayed first in the
     #     view.

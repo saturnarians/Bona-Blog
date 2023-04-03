@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 # Third-party Django app imports.
-from model_mommy import mommy
+from model_bakery import baker
 
 # Blog application imports.
 from blog.models.article_models import Article
@@ -18,9 +18,9 @@ class ArticleTestCase(TestCase):
 
     def setUp(self):
         """
-          Set up all the tests using model_mommy.
+          Set up all the tests using model_bakery.
         """
-        self.article = mommy.make(_model=Article, body="Test")
+        self.article = baker.make(_model=Article, body="Test")
 
     def test_if_article_returns_the_right_human_readable_representation(self):
         self.assertEqual(self.article.__str__(), self.article.title)

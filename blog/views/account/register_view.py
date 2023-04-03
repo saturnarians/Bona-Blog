@@ -1,5 +1,5 @@
 # Django imports.
-from django.utils.encoding import force_bytes, force_text
+from django.utils.encoding import force_bytes,smart_str, force_str
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import login
 from django.contrib import messages
@@ -64,7 +64,7 @@ class ActivateView(View):
 
     def get(self, request, uidb64, token):
         try:
-            uid = force_text(urlsafe_base64_decode(uidb64))
+            uid =smart_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             user = None

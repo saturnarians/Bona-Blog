@@ -6,7 +6,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 # Third-party Django app imports.
-from model_mommy import mommy
+from model_bakery import baker
 
 # Blog application imports.
 from blog.models.article_models import Article
@@ -22,16 +22,16 @@ class ArticleListViewTestCase(TestCase):
         """
         Set up all the tests using django client.
 
-        Model mommy creates a single category called category.
+        Model bakery creates a single category called category.
 
-        Model mommy creates four articles and store them in a list called
+        Model bakery creates four articles and store them in a list called
         articles. So the last article in the list will be the first article
-        in the list view since it was created last by model mommy. You can
+        in the list view since it was created last by model bakery. You can
         access the articles using their indices.
         """
         self.client = Client()
-        self.category = mommy.make(Category)
-        self.articles = mommy.make(Article,
+        self.category = baker.make(Category)
+        self.articles = baker.make(Article,
                                    body="Test",
                                    status='PUBLISHED',
                                    category=self.category,
@@ -77,10 +77,10 @@ class ArticleListViewTestCase(TestCase):
         This test checks if the view returns the right articles according to the
         date they were published.
 
-        In the setup, model mommy creates four articles and store
+        In the setup, model bakery creates four articles and store
         them in a list called articles. So the last article in the list will
         be the first article in the list view since it was created last by model
-        mommy.
+        bakery.
         The list view orders articles according to the time they were published.
         """
         response = self.client.get('')
@@ -114,12 +114,12 @@ class ArticleDetailViewTestCase(TestCase):
     """
     def setUp(self):
         """
-        Model mommy creates an article.
+        Model bakery creates an article.
 
         :return: an article
         """
         self.client = Client()
-        self.article = mommy.make(_model=Article, body="Test")
+        self.article = baker.make(_model=Article, body="Test")
 
     def test_article_detail_view_absolute_url(self):
         response = self.client.get(self.article.get_absolute_url())
@@ -160,7 +160,7 @@ class ArticleSearchListViewTestCase(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.articles = mommy.make(Article, _quantity=5, body="Test", status='PUBLISHED')
+        self.articles = baker.make(Article, _quantity=5, body="Test", status='PUBLISHED')
 
     def test_article_search_list_view_status_code(self):
         response = self.client.get(reverse('blog:article_search_list_view'))
@@ -195,12 +195,12 @@ class ArticleCreateViewTestCase(TestCase):
     """
     def setUp(self):
         """
-        Model mommy creates an article.
+        Model bakery creates an article.
 
         :return: an article
         """
         self.client = Client()
-        self.author = mommy.make(User)
+        self.author = baker.make(User)
         test_user1 = User.objects.create_user(username='testuser1',
                                               password='1X<ISRUkw+tuK')
         test_user1.save()
@@ -232,7 +232,7 @@ class ArticleCreateViewTestCase(TestCase):
     #
     #     self.assertEqual(Article.objects.count(), 0)
     #
-    #     article = mommy.make(Article, body="test", image_credit="new", author=self.author, status='PUBLISHED')
+    #     article = baker.make(Article, body="test", image_credit="new", author=self.author, status='PUBLISHED')
     #     article1 = model_to_dict(article)
     #     response = self.client.post(reverse('blog:article_write'), article1)
     #
@@ -274,7 +274,7 @@ class ArticleCreateViewTestCase(TestCase):
     #
     #     self.assertEqual(Article.objects.count(), 0)
     #
-    #     article = mommy.make(Article, title='', body='', image_credit='', status='PUBLISHED')
+    #     article = bakery.make(Article, title='', body='', image_credit='', status='PUBLISHED')
     #     article1 = model_to_dict(article)
     #     response = self.client.post(reverse('blog:article_write'), article1)
     #     self.assertEqual(response.status_code, 200)
@@ -290,19 +290,19 @@ class ArticleCreateViewTestCase(TestCase):
 #     """
 #     def setUp(self):
 #         """
-#         Model mommy creates five articles.
+#         Model bakery creates five articles.
 #
 #         :return: articles
 #         """
 #         self.client = Client()
-#         self.author = mommy.make(User)
+#         self.author = bakery.make(User)
 #         test_user1 = User.objects.create_user(username='testuser1',
 #                                               password='1X<ISRUkw+tuK')
 #         test_user1.save()
 #         test_user2 = User.objects.create_user(username='testuser2',
 #                                               password='1X<ISRUkw+tuK')
 #         test_user2.save()
-#         self.articles = mommy.make(Article, author=test_user1,  _quantity=5)
+#         self.articles = bakery.make(Article, author=test_user1,  _quantity=5)
 #
 #     def test_article_author_can_delete_article(self):
 #         self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
@@ -334,16 +334,16 @@ class ArticleCreateViewTestCase(TestCase):
 #     """
 #     def setUp(self):
 #         """
-#         Model mommy creates an article.
+#         Model bakery creates an article.
 #
 #         :return: an article
 #         """
 #         self.client = Client()
-#         self.author = mommy.make(User)
+#         self.author = bakery.make(User)
 #         self.test_user1 = User.objects.create_user(username='testuser1',
 #                                                    password='1X<ISRUkw+tuK')
 #         self.test_user1.save()
-#         self.article = mommy.make(Article, author=self.test_user1)
+#         self.article = bakery.make(Article, author=self.test_user1)
 #
 #     def test_redirect_if_not_logged_in(self):
 #         response = self.client.get(reverse("article:article_update",
@@ -375,8 +375,8 @@ class ArticleCreateViewTestCase(TestCase):
 #         self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
 #         response = self.client.get(self.article.get_absolute_url())
 #
-#         new_category = mommy.make(Category)
-#         new_article = mommy.make(Article, category=new_category, title="Coming",
+#         new_category = bakery.make(Category)
+#         new_article = bakery.make(Article, category=new_category, title="Coming",
 #                                  body="New is going to be awesome")
 #         article = model_to_dict(new_article)
 #         update_response = self.client.get(reverse('article:article_update',

@@ -6,7 +6,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 # Third-party Django app imports.
-from model_mommy import mommy
+from model_bakery import baker
 
 # Blog application imports.
 from blog.models.article_models import Article
@@ -22,11 +22,11 @@ class CategoriesListViewTestCase(TestCase):
         """
         Set up all the tests using django client.
 
-        Model mommy creates five categories and store them in a list called
+        Model bakerycreates five categories and store them in a list called
         categories. You can access them with their indices.
         """
         self.client = Client()
-        self.categories = mommy.make(Category, _quantity=5)
+        self.categories = baker.make(Category, _quantity=5)
 
     def test_categories_list_view_status_code(self):
         response = self.client.get(reverse('blog:categories_list'))
@@ -63,11 +63,11 @@ class CategoryArticlesListViewTestCase(TestCase):
 
     def setUp(self):
         """
-        Set up all the tests using django client and model_mommy.
+        Set up all the tests using django client and model_bakery.
         """
         self.client = Client()
-        self.category = mommy.make(Category)
-        self.articles = mommy.make(Article, body="Test", category=self.category, _quantity=5)
+        self.category = baker.make(Category)
+        self.articles = baker.make(Article, body="Test", category=self.category, _quantity=5)
 
     def test_category_article_list_view_status_code(self):
         response = self.client.get(self.category.get_absolute_url())
@@ -104,10 +104,10 @@ class CategoryArticlesListViewTestCase(TestCase):
     #     This test checks if the view returns the right articles according to the
     #     date they were published.
     #
-    #     In the setup, model mommy creates five articles and store
+    #     In the setup, model bakerycreates five articles and store
     #     them in a list called articles. So the last article in the list will
     #     be the first article in the list view since it was created last by model
-    #     mommy.
+    #     bakery.
     #     The list view orders articles according to the time they were published
     #     so the last article in the articles list will be displayed first in the
     #     view.
@@ -140,12 +140,12 @@ class CategoryArticlesListViewTestCase(TestCase):
 #     """
 #     def setUp(self):
 #         """
-#         Model mommy creates a category.
+#         Model bakerycreates a category.
 #
 #         :return: an article
 #         """
 #         self.client = Client()
-#         self.author = mommy.make(User)
+#         self.author = bakery.make(User)
 #         test_user1 = User.objects.create_user(username='testuser1',
 #                                               password='1X<ISRUkw+tuK')
 #         test_user1.save()
@@ -177,7 +177,7 @@ class CategoryArticlesListViewTestCase(TestCase):
 #
 #         self.assertEqual(Category.objects.count(), 0)
 #
-#         category = mommy.make(Category)
+#         category = bakery.make(Category)
 #         category1 = model_to_dict(category)
 #         response = self.client.post(reverse('article:category_create'), category1)
 #         print(response.context_data)
@@ -206,7 +206,7 @@ class CategoryArticlesListViewTestCase(TestCase):
 #
 #         self.assertEqual(Category.objects.count(), 0)
 #
-#         category = mommy.make(Category)
+#         category = bakery.make(Category)
 #         category1 = model_to_dict(category)
 #         response = self.client.post(reverse('article:category_create'), category1)
 #         # print(response.context_data)
